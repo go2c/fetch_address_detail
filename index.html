@@ -7,23 +7,49 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>根据地址获取省市区街道</title>
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
-    <link rel="stylesheet" href="css\demo-center.css"/>
+    <!-- <link rel="stylesheet" href="css/demo-center.css"/> -->
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3362243_u447yvgo0g.css"/>
     <style>
         html,body,#container{
             height:100%;
             width:100%;
         }
         .btn{
-            width:10rem;
-            margin-left:6.8rem;   
+            width:100%;
+            margin:1rem 0rem;   
+        } 
+        #closeBtn:link, #miniShow:link{
+            text-decoration: none;
+            cursor:pointer;
         }
+        #closeBtn, #miniShow{
+            cursor:pointer;
+        }
+        #miniShow:hover{
+            background-color: #25A5F799;
+        }
+        #closeBtn:hover{
+            color: #25A5F7;
+        }
+        #miniShow{
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25A5F7;
+            color: #ffffff;
+            text-align: center;
+            padding-top: 3px;       
+     
+        }  
     </style>
 </head>
 <body>
 <div id="container" class="map" tabindex="0"></div>
-<div class="input-card" style='width:28rem;'>
-    <div class='input-title'  style='color:rgb(0, 0, 0)'>地址街道信息查询</div>
-    <div class='input-subtitle' >请输入你需要查询的地址。</div>
+<div id="inputArea" class="input-card" style='width:28rem; display: block;'>
+    <a id="closeBtn" class="iconfont icon-lanxi-fullscreen-shrink" style="float: right; margin-top: 0px; color: #333333;"></a>
+    <div class='input-title'>地址街道信息查询</div>
     <div class="input-item">
             <div class="input-item-prepend"><span class="input-item-text" >查询地址</span></div>
             <input id='address' type="text" value='' placeholder="请输入地址" >
@@ -45,22 +71,27 @@
             <input id='street' disabled type="text">
     </div>
     <input id="geo" type="button" class="btn" value="查询一下" />
-    
-    <div>
-        <div class='output-title'>当前查询地址:</div>
-        <div class='output-result' id='address_2'></div>
+    <!-- <input id="closeBtn" type="button" value="icon-lanxi-close-bold" class="iconfont icon-lanxi-close-bold" /> -->
+   
+    <div style="font-size: .9rem;">
+        <div style="font-weight: bold;">当前查询地址:</div>
+        <div id='address_2'></div>
     </div>
 
 </div>
+<a id="miniShow" class="iconfont icon-lanxi-fullscreen-expand" style="display: none;"></a>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=160cab8ad6c50752175d76e61ef92c50"></script>
 <script src="https://webapi.amap.com/ui/1.1/main.js"></script>
 <!--预加载 SimpleMarker -->
 <script src="https://webapi.amap.com/ui/1.1/ui/overlay/SimpleMarker.js"></script>
+<script src="https://at.alicdn.com/t/c/font_3362243_u447yvgo0g.js"></script>
 <script type="text/javascript">        
     AMapUI.loadUI(['misc/PositionPicker'], function(PositionPicker) {
-        var getplace = document.getElementById("geo");
-        var getAddresskey = document.getElementById('address')
-
+        const getplace = document.getElementById("geo");
+        const getAddresskey = document.getElementById('address')
+        const closeBtn = document.getElementById('closeBtn')
+        const inpuArea = document.getElementById('inputArea')
+        const miniShow = document.getElementById('miniShow')
         var map = new AMap.Map('container', {
             zoom: 16,
             scrollWheel: true,
@@ -142,6 +173,21 @@
                 return false;
             }
             return true;
+        });
+
+        closeBtn.addEventListener('click', function(){
+            if (inpuArea.style.display === 'block'){
+                inpuArea.style.display = 'none';
+                miniShow.style.display = 'block';
+            } else {
+                inpuArea.style.display = 'block';
+                miniShow.style.display = 'none';
+            }
+        });
+
+        miniShow.addEventListener('click', function(){         
+            inpuArea.style.display = 'block';
+            miniShow.style.display = 'none';            
         });
         
         positionPicker.start();
